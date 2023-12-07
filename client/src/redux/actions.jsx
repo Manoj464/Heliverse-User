@@ -1,16 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
-
-const userSlice = createSlice({
-  name: 'user',
-  initialState: [],
-  reducers: 
-  {
-    addUser(state,action){
-      
-    },
-  },
-});
-
-console.log(userSlice.actions);
-
-export default userSlice.reducer;
+export const changePage = (query) => ({
+    type: 'SET_CURRENT_PAGE',
+    payload: query,
+  });
+  
+  export const setSearchQuery = (query) => ({
+    type: 'SET_SEARCH_QUERY',
+    payload: query,
+  });
+  

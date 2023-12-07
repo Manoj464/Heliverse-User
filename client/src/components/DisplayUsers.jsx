@@ -1,75 +1,62 @@
-import React, { useState } from 'react';
-
-//MUI
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { Box, Typography, Card } from '@mui/material';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import TextField from '@mui/material/TextField';
+import PageNav from './PageNav';
+import SearchUser from './SearchUsers';
+import mockUserData from '../data/heliverse_mock_data.json';
+import { calculateUsersOnPage } from '../utils/utils';
 
-import mockUserData from '../data/heliverse_mock_data.json'; 
+const CardStyle = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+  gap: '20px',
+  margin: '20px 30px',
+  
+}
 
 const USERS_PER_PAGE = 20;
 
 const DisplayUsers = () => {
-  const [currentPage, setCurrentPage] = useState(0);
+  const currentPage = useSelector((state) => state.currentPage);
+  const searchQuery = useSelector((state) => state.searchQuery);
 
-  const startIndex = (currentPage) * USERS_PER_PAGE;
+  const startIndex = currentPage * USERS_PER_PAGE;
   const endIndex = startIndex + USERS_PER_PAGE;
 
-  const usersOnPage = mockUserData.slice(startIndex, endIndex);
+  const usersOnPage = calculateUsersOnPage(currentPage, USERS_PER_PAGE, mockUserData, searchQuery).usersOnPage;
 
   return (
     <Box>
-      <Typography variant="h5">User Details</Typography>
-      {usersOnPage.map((user) => (
-        <Box key={user.id}>
-          <Card sx={{ maxWidth: 345 }}>
-      <CardMedia
-        sx={{ height: 140 }}
-        image={user.avatar}
-        title="avatar"
-      />
-      <CardContent>
-        <Typography gutterBottom variant="h4" component="div">
-        {user.first_name} {user.last_name}
-        </Typography>
-        <Typography variant="h6" component="div">
-          Email: {user.email}
-        </Typography>
-        <Typography variant="h6" component="div">
-          Domain: {user.domain}
-        </Typography>
-        <Typography variant="h6" component="div">
-          Available: {user.available ? 'Yes' : 'No'}
-        </Typography>
+      <SearchUser />
 
-      </CardContent>
-      <CardActions>
-      </CardActions>
-    </Card>
-          <hr />
-
-        </Box>
-      ))}
-
-      {/* Pagination controls */}
-      {/**Use < > << >> buttons later*/}
-      <Box>
-      <button onClick={() => setCurrentPage(currentPage - 5)} disabled={currentPage < 5}>
-          -5
-        </button>
-        <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 0}>
-          -1
-        </button>
-        <span> Page {currentPage} </span>
-        <button onClick={() => setCurrentPage(currentPage + 1)} disabled={endIndex >= mockUserData.length}>
-          +1
-        </button>
-        <button onClick={() => setCurrentPage(currentPage + 5)} disabled={currentPage >= (mockUserData.length / USERS_PER_PAGE) - 5}>
-          +5
-        </button>
+      <Box
+        sx={CardStyle}
+      >
+        {usersOnPage.map((user) => (
+          <Card key={user.id} sx={{ maxWidth: 250, backgroundColor: '#4CAF50', color: '#fff' }}>
+            <CardMedia sx={{ height: 140, backgroundColor: '#99ffff', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <img src={user.avatar} alt="Avatar" style={{ maxWidth: '100%', maxHeight: '100%' }} />
+            </CardMedia>
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                {user.first_name} {user.last_name}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Email: {user.email}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Domain: {user.domain}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Available: {user.available ? 'Yes' : 'No'}
+              </Typography>
+            </CardContent>
+          </Card>
+        ))}
       </Box>
+      <PageNav />
     </Box>
   );
 };
