@@ -18,7 +18,7 @@ import mockUserData from '../data/heliverse_mock_data.json';
 
 //redux
 import { useDispatch, useSelector } from 'react-redux';
-import { setFilters } from '../redux/actions';
+import { setFilters, changePage } from '../redux/actions';
 
 const StyledList = styled(List)`
   background-color: #fff;
@@ -119,6 +119,7 @@ const FilterDrawer = ({ onClose, onApplyFilter }) => {
   const handleApplyFilter = () => {
     const updatedFilters = { gender: selectedGender, domain: selectedDomains, available: selectedAvail === 'true' };
     dispatch(setFilters(updatedFilters));
+    dispatch(changePage(0));
     onClose();
   };
 
@@ -194,7 +195,7 @@ const FilterDrawer = ({ onClose, onApplyFilter }) => {
 
       <FilterButton onClick={handleApplyFilter}>Apply Filter</FilterButton>
       <ClearButton onClick={handleClearFilters}>Clear Filters</ClearButton>
-      
+
     </StyledList>
   );
 };
