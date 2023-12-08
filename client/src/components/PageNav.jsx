@@ -1,14 +1,20 @@
 import React from 'react';
+
+//MUI
 import { Box, Button } from '@mui/material';
+
+//redux
 import { useSelector, useDispatch } from 'react-redux';
 import { changePage } from '../redux/actions';
 import { calculateUsersOnPage } from '../utils/utils';
+
+//data
 import mockUserData from '../data/heliverse_mock_data.json';
 
 const PageNav = () => {
   const dispatch = useDispatch();
   const currentPage = useSelector((state) => state.currentPage);
-  const totalUsers = useSelector((state) => calculateUsersOnPage(state.currentPage, 20, mockUserData, state.searchQuery)).len;
+  const totalUsers = useSelector((state) => calculateUsersOnPage(state.currentPage, 20, mockUserData, state.searchQuery,state.filters)).len;
 
   const handlePageChange = (newPage) => {
     dispatch(changePage(newPage));
@@ -25,6 +31,8 @@ const PageNav = () => {
         backgroundColor: '#ffff80',
       }}
     >
+
+
       <Button
         variant="contained"
         sx={{
@@ -42,6 +50,8 @@ const PageNav = () => {
       >
         &lt;&lt;
       </Button>
+
+
       <Button
         variant="contained"
         sx={{
@@ -59,6 +69,8 @@ const PageNav = () => {
       >
         &lt;
       </Button>
+
+
       <span style={{ margin: '0 10px', fontSize: '1.2rem' }}>Page {currentPage}</span>
       <Button
         variant="contained"
@@ -77,6 +89,8 @@ const PageNav = () => {
       >
         &gt;
       </Button>
+
+
       <Button
         variant="contained"
         sx={{
@@ -94,6 +108,8 @@ const PageNav = () => {
       >
         &gt;&gt;
       </Button>
+
+      
     </Box>
   );
 };
